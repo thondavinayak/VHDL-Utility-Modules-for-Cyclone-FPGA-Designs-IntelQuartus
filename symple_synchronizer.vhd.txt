@@ -1,0 +1,34 @@
+-- File: symple_synchronizer.vhd
+-- Project: any
+--
+-- Purpose: Use a simple two-stage synchronizer to sync an external input to the clock maximizing the MTBF
+--
+
+library ieee;
+use ieee.std_logic_1164.all;
+entity simple_synchronizer is
+port (
+   clk:        in  std_logic;
+   signal_in:  in  std_logic;
+   signal_out: out std_logic
+   );
+end entity simple_synchronizer;
+
+architecture arch of simple_synchronizer is
+	-- Use an array to name the outputs of every stage
+    signal shift_buffer: std_logic_vector (1 downto 0);
+begin
+	-- The output of this element is the output of the last stage
+    signal_out <= shift_buffer(1);
+    
+    reg_input: process (clk) is
+    begin
+    	-- On the rising edge of the clock ...
+        if rising_edge(clk) then
+        	-- Advance the data from the outside of the chip (signal_in)
+        	-- one stage to the inside of the chip (signal_out)
+            shift_buffer(0) <= signal_in;
+            shift_buffer(1) <= shift_buffer(0);
+        end if;
+    end process reg_input;
+end architecture arch;

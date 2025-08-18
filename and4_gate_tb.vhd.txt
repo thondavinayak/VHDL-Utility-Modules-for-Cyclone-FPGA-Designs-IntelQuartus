@@ -1,0 +1,88 @@
+--------------------------------------------------------------------------------
+-- Company: 
+-- Engineer:
+--
+-- Create Date:   09:32:27 03/29/2024
+-- Design Name:   
+-- Module Name:   C:/Xilinx/projects/demo/and4_gate_tb.vhd
+-- Project Name:  demo
+-- Target Device:  
+-- Tool versions:  
+-- Description:   
+-- 
+-- VHDL Test Bench Created by ISE for module: and_gate
+-- 
+-- Dependencies:
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+--
+-- Notes: 
+-- This testbench has been automatically generated using types std_logic and
+-- std_logic_vector for the ports of the unit under test.  Xilinx recommends
+-- that these types always be used for the top-level I/O of a design in order
+-- to guarantee that the testbench will bind correctly to the post-implementation 
+-- simulation model.
+--------------------------------------------------------------------------------
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+USE ieee.numeric_std.ALL;
+ 
+ENTITY and4_gate_tb IS
+END and4_gate_tb;
+ 
+ARCHITECTURE behavior OF and4_gate_tb IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT and4_gate
+    PORT(
+         a : IN  std_logic;
+         b : IN  std_logic;
+         c : IN  std_logic;
+         d : IN  std_logic;
+         y : OUT  std_logic
+        );
+    END COMPONENT;
+    
+
+   --Inputs
+   signal a : std_logic := '0';
+   signal b : std_logic := '0';
+   signal c : std_logic := '0';
+   signal d : std_logic := '0';
+
+ 	--Outputs
+   signal y : std_logic;
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: and4_gate PORT MAP (
+          a => a,
+          b => b,
+          c => c,
+          d => d,
+          y => y
+        );
+
+   -- Stimulus process
+   stim_proc: process
+		variable test_vector: unsigned(3 downto 0);
+   begin		
+		for i in 0 to 15 loop
+			test_vector := to_unsigned(i, 4);
+			a <= test_vector(0);
+			b <= test_vector(1);
+			c <= test_vector(2);
+			d <= test_vector(3);
+			wait for 100 ns;
+		end loop;
+		assert false report "Simulation finished, there are no more input vectors (not a failure actually)" severity failure;
+	end process;
+
+END;
