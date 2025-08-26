@@ -1,0 +1,29 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity pwm_gen is
+    generic (
+        RESOLUTION : integer := 8  -- PWM resolution bits
+    );
+    port (
+        clk     : in  std_logic;
+        reset   : in  std_logic;
+        duty    : in  unsigned(RESOLUTION-1 downto 0);
+        pwm_out : out std_logic
+    );
+end entity;
+
+architecture Behavioral of pwm_gen is
+    signal counter : unsigned(RESOLUTION-1 downto 0) := (others => '0');
+begin
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            counter <= (others => '0');
+        elsif rising_edge(clk) then
+            counter <= counter + 1;
+        end if;
+    end process;
+    pwm_out <= '1' when counter < duty else '0';
+end Behavioral;
